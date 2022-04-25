@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+ <script>
+    function cargar(){
+        var envio = new XMLHttpRequest();
+        envio.onreadystatechange = function() { 
+            if (this.readyState == 4 && this.status == 200) {
+
+                pintachoco(envio.responseXML);
+
+            }
+
+        }
+        envio.open("GET", "camaras.xml", true);
+        envio.send();
+    
+    function pintachoco(xml){
+        var arr_latitud = xml.getElementsByTagName("Latitud");
+        var arr_longitud = xml.getElementsByTagName("Longitud");
+        var arr_ruta_img = xml.getElementsByTagName("URL");
+        var obj_tabla = document.createElement("table");
+        for(i=0; i<arr_latitud.length; i++ ){
+        var img = document.createElement("img");
+        img.src = "https://"+arr_ruta_img[i].childNodes[0].nodeValue;
+        img.style.width="50px";
+        img.style.height = "50px";
+        var obj_fila = document.createElement("tr");
+        var obj_celda_latitud = document.createElement("td");
+        var obj_celda_longitud = document.createElement("td");
+        var obj_celda_img = document.createElement("td");
+
+
+        var camara_latitud=arr_latitud[i].childNodes[0].nodeValue;
+        var camara_longitud=arr_longitud[i].childNodes[0].nodeValue;
+    
+
+       obj_celda_latitud.innerHTML = camara_latitud;
+       obj_celda_longitud.innerHTML = camara_longitud;
+        obj_celda_img.appendChild(img);
+       obj_fila.appendChild(obj_celda_latitud);     
+       obj_fila.appendChild(obj_celda_longitud);
+       obj_fila.appendChild(obj_celda_img);
+       obj_tabla.appendChild(obj_fila);
+
+       document.getElementById("demo").appendChild(obj_tabla);
+    }
+    }
+}
+
+    </script>
+</head>
+<body onload="cargar()">
+    <div id="demo"></div>
+
+</body>
+</html>
